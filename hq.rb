@@ -6,6 +6,7 @@ class TaxiCab
     @directions = [:north, :east, :south, :west]
     @dir_index = 0
     @dir = @directions[@dir_index]
+    @journey = []
   end
 
   def solve
@@ -34,16 +35,23 @@ class TaxiCab
   end
 
   def travel distance
-    case @dir
+    distance.times do
+      move
+      puts @position.inject(:+) if @journey.include? @position
+      @journey << @position
+    end
+  end
 
+  def move
+    case @dir
     when :north
-      @position = [@position[0] + distance, @position[1]]
+      @position = [@position[0] + 1, @position[1]]
     when :east
-      @position = [@position[0], @position[1] + distance]
+      @position = [@position[0], @position[1] + 1]
     when :south
-      @position = [@position[0] - distance, @position[1]]
+      @position = [@position[0] - 1, @position[1]]
     when :west
-      @position = [@position[0], @position[1] - distance]
+      @position = [@position[0], @position[1] - 1]
     end
   end
 
