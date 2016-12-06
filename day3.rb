@@ -9,8 +9,14 @@ class TraingleCount
     @input.map!{|e| e.split.map!(&:to_i)}
   end
 
+  def threes_transpose
+    array = []
+    parse.each_slice(3){|e| array << e.transpose }
+    array.flatten(1)
+  end
+
   def solve
-    parse.each do |triangle|
+    threes_transpose.each do |triangle|
       if triangle.max < triangle.min(2).inject(:+)
         @count +=1
       end
