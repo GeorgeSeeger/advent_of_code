@@ -1,20 +1,22 @@
 class Rooms
 
-  attr_reader :sector_sum
+  attr_reader :sector_sum, :room_names
 
   def initialize input
     @input = input
     @sector_sum = 0
     @counts = {}
     @room = nil
+    @room_names = []
     solve
   end
 
   def solve
     @input.each do |string|
-      @room = Room.new(string)
+      @room = Room.new string
       @counts = count_letters_room
       @sector_sum += @room.sector_id if real_room?
+      puts @room.sector_id if real_room? && @room.decoded_name[0,5] == "north"
     end
     @sector_sum
   end
@@ -40,6 +42,7 @@ class Rooms
 end
 
 class Room
+
   attr_reader :sector_id, :check_sum, :name
 
   def initialize string
@@ -61,6 +64,20 @@ class Room
     @name = parse[0...-1].join.chars.sort.join
   end
 
+  def decoded_name
+    name = ""
+    parse[0...-1].each do |a|
+      a.chars do |c|
+        name += decode c
+      end
+      name += " "
+    end
+    name[0...-1]
+  end
+
+  def decode char
+    ((char.ord-97+@sector_id)%26 + 97).chr
+  end
 end
 
-p Rooms.new(File.readlines("input_day4.txt")).sector_sum
+p Rooms.new(File.readlines("input_day4.txt")).room_names.grep /north/
