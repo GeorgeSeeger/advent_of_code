@@ -36,7 +36,6 @@ class IPv7
       for i in (0..string.length - 3)
         substring = string[i,3]
         if is_abba? substring
-          # puts substring
           return true if contain_bab? substring
         end
       end
