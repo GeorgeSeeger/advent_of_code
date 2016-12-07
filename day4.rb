@@ -16,9 +16,8 @@ class Rooms
       @room = Room.new string
       @counts = count_letters_room
       @sector_sum += @room.sector_id if real_room?
-      puts @room.sector_id if real_room? && @room.decoded_name[0,5] == "north"
+      puts @room.sector_id if real_room? && @room.decoded_name.include?("north")
     end
-    @sector_sum
   end
 
   def count_letters_room
@@ -65,7 +64,7 @@ class Room
   end
 
   def decoded_name
-    parse[0...-1].join(" ").split('').map { |c|
+    parse[0...-1].join(" ").chars.map { |c|
       if c == " " then " " else decode c end
     }.join
   end
@@ -75,5 +74,5 @@ class Room
   end
 end
 
-p Room.new("aczupnetwp-mfyyj-opalcexpye-977[peyac]").decoded_name
-p Rooms.new(File.readlines("input_day4.txt")).room_names.grep /north/
+# p Room.new("aczupnetwp-mfyyj-opalcexpye-977[peyac]").decoded_name
+p Rooms.new(File.readlines("input_day4.txt")).sector_sum
