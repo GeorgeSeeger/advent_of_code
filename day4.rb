@@ -65,14 +65,9 @@ class Room
   end
 
   def decoded_name
-    name = ""
-    parse[0...-1].each do |a|
-      a.chars do |c|
-        name += decode c
-      end
-      name += " "
-    end
-    name[0...-1]
+    parse[0...-1].join(" ").split('').map { |c|
+      if c == " " then " " else decode c end
+    }.join
   end
 
   def decode char
@@ -80,4 +75,5 @@ class Room
   end
 end
 
+p Room.new("aczupnetwp-mfyyj-opalcexpye-977[peyac]").decoded_name
 p Rooms.new(File.readlines("input_day4.txt")).room_names.grep /north/
