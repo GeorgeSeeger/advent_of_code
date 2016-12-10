@@ -1,9 +1,11 @@
 class Decompressor
 
+  attr_accessor :count
+
   def initialize input
     @input = input.chars
-    @output = []
     @marker = ""
+    @count = 0
     solve
   end
 
@@ -17,7 +19,7 @@ class Decompressor
     if char == "("
       process_bracket
     else
-      @output << char
+      @count +=1
     end
   end
 
@@ -33,20 +35,17 @@ class Decompressor
 
   def uncompress string
     marker = string.split("x").map(&:to_i)
-    @output << @input.shift(marker[0]).join * marker[1]
+    @count += marker[1] * Decompressor.new(truncate(marker[0])).count
   end
 
   def print_count
-    puts @output.flatten.reject{|e| e.match /\s/}.join.length
+    puts @count
   end
 
-  def print_output
-    puts @output.join
-  end
-
-  def output
-    @output.join
+  def truncate amount
+    @input.shift(amount).join
   end
 end
 
-Decompressor.new(File.readlines("day9/input.txt").first).print_count
+Decompressor.new(File.readlines("day9/input.txt").first.chomp).print_count
+# Decompressor.new("(27x12)(20x12)(13x14)(7x10)(1x12)A").print_count
